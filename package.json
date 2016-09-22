@@ -1,0 +1,31 @@
+{
+  "name": "vk",
+  "version": "0.0.1",
+  "description": "vk auto ars32",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "keywords": [
+    "vk"
+  ],
+  "author": "ars32",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer-stylus": "^0.10.0",
+    "body-parser": "^1.15.2",
+    "chance": "^1.0.4",
+    "cheerio": "^0.22.0",
+    "connect-busboy": "0.0.2",
+    "cors": "^2.8.1",
+    "express": "^4.14.0",
+    "gm": "^1.23.0",
+    "jade": "^1.11.0",
+    "node-cmd": "^1.1.1",
+    "querystring": "^0.2.0",
+    "request": "^2.75.0",
+    "stylus": "^0.54.5",
+    "vk-api": "^0.1.0"
+  }
+}
