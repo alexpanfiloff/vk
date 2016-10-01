@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  style
+    :stylus
+      body
+        display block
+      .act
+        width 800px
+        margin auto
+        background #eee
+        border-bottom 2px solid #aaa
+        h2,.time,p,a
+          width 80%
+          margin auto
+          margin-top .2em
+  - for( var i in data)
+    .act
+      h2=data[i].action
+      .time=data[i].time
+      p=data[i].desc
+        | &nbsp;
+        a(href="#{data[i].link}")=data[i].link

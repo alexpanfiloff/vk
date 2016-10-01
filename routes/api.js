@@ -5,6 +5,7 @@ var downloader = require('../scripts/downloader');
 var genimg = require('../scripts/genimg');
 var request = require('request');
 var fs = require('fs');
+var qs = require('qs');
 var querystring = require('querystring');
 
 
@@ -41,7 +42,7 @@ router.get('/test', function(req,res,next){
   genimg.test(function(n){
     res.redirect(n.replace('./public',''));
   });
-})
+});
 
 
 ///api/photos.getUploadServer?album_id=235820836
@@ -87,33 +88,15 @@ router.get('/upload', function(req,res,next){
 
 });
 
-router.get('/up', function(req,res,next){
-  if(req.query.url){
-    downloader.base64url(req.query.url, function(d){
-        res.send(d);
-        // VK.api( 'photos.getUploadServer' , {
-        //   album_id: 235820836 ,
-        //   v: 5.53,
-        //   access_token: token.trim(),
-        //   sig : '3f2a1097fd1dff003d',
-        //   user_id : 210149434
-        // } , function(err,result) {
-        //     if(err){ res.json(err); } else {
-        //       //console.log( result.response.upload_url + '&file1=' + d);
-        //       request.post({
-        //         url: result.response.upload_url + '&file1=' + d ,
-        //         //formData: {file1 : d }
-        //       }, function (err, httpResponse, body) {
-        //         console.log(err + httpResponse + body);
-        //         err? res.send( err): res.send( body);
-        //       })
-        //     }
-        // });
-    })
-  }else{
-    res.json({error: "no url passed"});
-  }
-});
+// router.get('/up', function(req,res,next){
+//   if(req.query.url){
+//     downloader.base64url(req.query.url, function(d){
+//         res.send(d);
+//     })
+//   }else{
+//     res.json({error: "no url passed"});
+//   }
+// });
 
 //210149434
 //https://oauth.vk.com/blank.html#access_token=fd78e0097aa45e519b85eed1fc8398bb836ad5baaf171da7a0a656f7b06aecac4cea36816158e4be4345e&expires_in=0&user_id=210149434&secret=3f2a1097fd1dff003d
@@ -123,9 +106,14 @@ router.get('/:method', function(req,res,next){ //user_ids
   q.sig = '3f2a1097fd1dff003d';
   q.v? void(0) : q.v = 5.53;
   q.user_id ? void(0) : q.user_id = 210149434;
-  VK.api( req.params.method , q , function(err,result) {
-      err?res.json(err):res.json(result.response);
-  });
+  request.get('https://api.vk.com/method/' + req.params.method + '?' + qs.stringify(q), function(er,rs,body){
+      var body = JSON.parse(body);
+      body = body.response ? body.response : body ;
+      res.json(body);
+  })
+  // VK.api( req.params.method , q , function(err,result) {
+  //     err?res.json(err):res.json(result.response);
+  // });
 });
 
 module.exports = router;

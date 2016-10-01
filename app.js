@@ -26,6 +26,8 @@ app.use(busboy());
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('public'));
+
+app.use('/db', require('./routes/db') );
 app.use('/api', require('./routes/api') );
 app.use('/serve', require('./routes/serve') );
 
