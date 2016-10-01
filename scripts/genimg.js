@@ -10,8 +10,7 @@ var chance = new Chance();
 
 module.exports = {
   'test': function(callback){
-    cmd.run(`cd /Users/arspop/vk/public/gen
-            rm -rf *.jpg`)
+    cmd.run("cd /Users/arspop/vk/public/gen && rm -rf *.jpg")
     var name = './public/gen/' + chance.word({length: 10}) + '.jpg';
     gm('./test.jpg')
     //.append("./mass.jpg", true)
