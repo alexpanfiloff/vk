@@ -1,3 +1,5 @@
+'use strict';
+
 var gm = require('gm');
 var Chance = require('chance');
 var fs = require('fs');
