@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  style
+    :verbatim:stylus
+      body
+        display block
+      .act
+        width 800px
+        margin auto
+        background #eee
+        border-bottom 2px solid #aaa
+        h2,.time,p,a,code
+          width 80%
+          margin-left 10%
+          margin-top .2em
+  - for( var i in data)
+    .act
+      a(href='/db/rem/order?id=#{data[i]._id}')
+        small=data[i]._id
+      p=data[i].name
+      .time=data[i].time
+      p=data[i].phone
+      p=data[i].email
+      if data[i].data
+        code #{JSON.stringify(data[i].data, null, '\t')}

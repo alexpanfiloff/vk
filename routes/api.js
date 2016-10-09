@@ -44,6 +44,14 @@ router.get('/test', function(req,res,next){
   });
 });
 
+router.get('/parse', function(req,res,next){
+  request.get('http://project94622.tilda.ws/', function(er,rs,body){
+    var st = fs.createWriteStream('../index.html');
+    st.write(body);
+    st.end();
+    res.end();
+  })
+})
 
 ///api/photos.getUploadServer?album_id=235820836
 
@@ -103,7 +111,7 @@ router.get('/upload', function(req,res,next){
 router.get('/:method', function(req,res,next){ //user_ids
   var q = req.query;
   q.access_token = token.trim();
-  q.sig = '3f2a1097fd1dff003d';
+  //q.sig = 'QvGMRWCZCXB3sRVUlnHG';
   q.v? void(0) : q.v = 5.53;
   q.user_id ? void(0) : q.user_id = 210149434;
   request.get('https://api.vk.com/method/' + req.params.method + '?' + qs.stringify(q), function(er,rs,body){

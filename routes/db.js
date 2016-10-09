@@ -23,35 +23,60 @@ var history = mongoose.model('History', {
   time : { type : Date, default: Date.now }
 });
 
+var order = mongoose.model('Order', {
+  name: String,
+  email: String,
+  phone: String,
+  data: Object,
+  time : { type : Date, default: Date.now }
+});
+
+var models = {
+  'history': history,
+  'order': order
+}
+
 var gets = {
   '/': function(req,res,next){
-    res.redirect('/db/all');
+    res.json(models);
   },
-  '/see': function(req,res,next){
-    history.find({}, function(err,data){
-      res.render('db', err?{err:err}:{data:data} );
-    })
-  },
-  '/all': function(req,res,next){
-    history.find({}, function(err,data){
-      res.json(err?err:data);
-    })
-  },
-  '/add': function(req,res,next){
-    if(req.query.action){
-      var ac = new history( req.query );
-      res.json(ac.save());
-    }else{
-      res.json({error: "no action passed"});
-    }
-  },
-  '/rem': function(req,res,next){
-    if(req.query.id){
-      history.findById(req.query.id , function(err,o){
-        o? res.json(o.remove()) : res.json({error: "not found"})
+  '/see/:model': function(req,res,next){
+    if(models.hasOwnProperty(req.params.model)){
+      models[req.params.model].find({}, function(err,data){
+        res.render(req.params.model, err?{err:err}:{data:data} );
       })
     }else{
-      res.json({error: "no id passed"});
+      res.json({error: "no model find"});
+    }
+  },
+  '/all/:model': function(req,res,next){
+    if(models.hasOwnProperty(req.params.model)){
+      models[req.params.model].find({}, function(err,data){
+        res.json(err?err:data);
+      })
+    }else{
+      res.json({error: "no model find"});
+    }
+  },
+  '/add/:model': function(req,res,next){
+    if(models.hasOwnProperty(req.params.model)){
+      var ac = new models[req.params.model]( req.query );
+      res.json(ac.save());
+    }else{
+      res.json({error: "no model find"});
+    }
+  },
+  '/rem/:model': function(req,res,next){
+    if(models.hasOwnProperty(req.params.model)){
+      if(req.query.id){
+        models[req.params.model].findById(req.query.id , function(err,o){
+          o? res.json(o.remove()) : res.json({error: "not found"})
+        })
+      }else{
+        res.json({error: "no id passed"});
+      }
+    }else{
+      res.json({error: "no model find"});
     }
   }
 }

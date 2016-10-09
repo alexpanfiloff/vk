@@ -6,7 +6,7 @@ var encoder = require('qs-iconv/encoder')('shift_jis');
 var chance = new require('chance')();
 var router = express.Router();
 
-var domain = 'http://localhost:3000';
+var domain = 'http://localhost:8500';
 
 var task = {
   auto: null
@@ -73,6 +73,25 @@ var gets = {
       var $ = cheerio.load(body);
       res.send( chance.pickone($('p').text().split('.')) );
     })
+  },
+  '/wikirender': function(err,res,next){
+    request.get("https://ru.wikipedia.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:%D0%A1%D0%BB%D1%83%D1%87%D0%B0%D0%B9%D0%BD%D0%B0%D1%8F_%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0" , function(err,rs,body){
+      var $ = cheerio.load(body);
+      res.render('wiki',{text: chance.pickone($('p').text().split('.'))});
+    })
+  },
+  '/order': function(req,res,next){
+      var mes =
+      "имя: " + req.query.name +
+      " тел: " + req.query.phone +
+      " email: " + req.query.email +
+      " начало: " + req.query.start +
+      " конец: " + req.query.end +
+      " у/п: " + req.query.street +
+      " допинфо: " + req.query.desc;
+      request.get(domain + '/api/messages.send?user_id=83250233&message=' + mes, function(err,rs,body){
+        res.send(body);
+      });
   },
   '/say': function(req,res,next) {
     request.get({
