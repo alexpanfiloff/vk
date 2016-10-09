@@ -104,7 +104,7 @@ $(document).ready(function() {
             if(arError.length > 0) {
                 $(this).find('.js-errorbox-all').css('display','block').show();
             }
-            alert(1);
+            //alert(1);
             return false;
         } else {
             var $activeForm = $(this);
